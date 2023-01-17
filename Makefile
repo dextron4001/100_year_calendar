@@ -1,7 +1,7 @@
 # Variables
-APP_NAME = my-dash-app
-BUILD_DIR = build
-GITHUB_PAGES_BRANCH = gh-pages
+APP_NAME = app
+BUILD_DIR = root
+GITHUB_PAGES_BRANCH = main
 
 # Convert the app to a static website
 static:
