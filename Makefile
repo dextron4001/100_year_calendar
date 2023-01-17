@@ -24,6 +24,7 @@ submodules:
 
 clean:
 	rm -rf 127.0.0.1:8050/
+	rm -rf joblib
 
 gh-pages:
 	cd 127.0.0.1:8050 && touch .nojekyll && git init && git add * && git add .nojekyll && git commit -m "update" && git remote add origin https://github.com/dextron4001/100_year_calendar.git && git push -f origin masin
