@@ -1,35 +1,23 @@
-html:
-	# Now build the app
-	export DEBUG=False && python3 app.py &
-	sleep 60
-	wget -r http://127.0.0.1:8050/ 
-	wget -r http://127.0.0.1:8050/_dash-layout 
-	wget -r http://127.0.0.1:8050/_dash-dependencies
-	sed -i 's/_dash-layout/_dash-layout.json/g' 127.0.0.1:8050/_dash-component-suites/dash_renderer/*.js 
-	sed -i 's/_dash-dependencies/_dash-dependencies.json/g' 127.0.0.1:8050/_dash-component-suites/dash_renderer/*.js
-	# Add our head
-	#sed -i '/<head>/ r head.html' 127.0.0.1:8050/index.html
-	#mv 127.0.0.1:8050/_dash-layout 127.0.0.1:8050/_dash-layout.json	
-	#mv 127.0.0.1:8050/_dash-dependencies 127.0.0.1:8050/_dash-dependencies.json
-	#cp modeling_short.html 127.0.0.1:8050/
-	#cp thumbnail.png 127.0.0.1:8050/
-	#cp assets/* 127.0.0.1:8050/assets/
-	#cp _static/async* 127.0.0.1:8050/_dash-component-suites/dash_core_components/
-	#cp _static/async-table* 127.0.0.1:8050/_dash-component-suites/dash_table/
-	#ps | grep python | awk '{print $$1}' | xargs kill -9
+# Variables
+APP_NAME = my-dash-app
+BUILD_DIR = build
+GITHUB_PAGES_BRANCH = gh-pages
 
-submodules:
-	git submodule init
-	git submodule update
+# Convert the app to a static website
+static:
+	# Create the build directory
+	mkdir -p $(BUILD_DIR)
+	# Convert the app to a static website
+	python -m dash_renderer.tool.renderer $(APP_NAME) $(BUILD_DIR)
 
-clean:
-	rm -rf 127.0.0.1:8050/
-	rm -rf joblib
-
-gh-pages:
-	cd 127.0.0.1:8050 && touch .nojekyll && git init && git add * && git add .nojekyll && git commit -m "update" && git remote add origin https://github.com/dextron4001/100_year_calendar.git && git push -f origin masin
-
-all: gh-pages
-
-teardown-python:
-	ps | grep python | awk '{print $$1}' | xargs kill -9
+# Deploy to GitHub Pages
+deploy: static
+	# Checkout the GitHub Pages branch
+	git checkout $(GITHUB_PAGES_BRANCH)
+	# Add and commit the build files
+	git add -f $(BUILD_DIR)/
+	git commit -m "Deploy to GitHub Pages"
+	# Push the branch to GitHub
+	git push origin $(GITHUB_PAGES_BRANCH) -f
+	# Checkout the previous branch
+	git checkout -
