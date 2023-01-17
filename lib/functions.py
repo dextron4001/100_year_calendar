@@ -39,16 +39,16 @@ class Weekly_calendar:
         
 def draw_graph(df,start_date):
     fig = px.scatter(df, 
-                x = df['week_no'],
-                y = df['year_no'],
-                color = df["status"],
-                color_discrete_map={"True": 'red' },
-                height = 900,
-                template = 'plotly_dark',
-                labels=dict(week_no="Week", year_no="Year", status="Status"),
-                color_discrete_sequence=['black','red','yellow'],
-                title = f"{start_date}"
-                )
+        x = df['week_no'],
+        y = df['year_no'],
+        color = df["status"],
+        color_discrete_map={"True": 'red' },
+        height = "100%",
+        template = 'plotly_dark',
+        labels=dict(week_no="Week", year_no="Year", status="Status"),
+        color_discrete_sequence=['black','red','yellow']#,
+        #title = f"{start_date}"
+        )
     fig.update_layout( 
         xaxis = dict(tickmode = 'linear', tick0 = 0, dtick = 1 , range = [-0.5,51.5]),
         yaxis = dict(tickmode = 'linear', tick0 = 0, dtick = 5 , range = [-0.5,100.5])

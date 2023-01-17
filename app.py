@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 
 dbc_css = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.min.css"
 
-start_date = dt.date(1990,2,19)
+start_date = dt.date(1990,1,1)
 
 SIDEBAR_STYLE = {
     "position" : "fixed",
@@ -17,8 +17,6 @@ SIDEBAR_STYLE = {
 }
 
 CONTENT_STYLE = {
-    "margin-left" : "2rem",
-    "margin-right": "2rem",
     "padding": "1rem 1rem"
 }
 
@@ -36,6 +34,9 @@ birthdate_picker = html.Div(
                 ),
                 dcc.DatePickerSingle(
                     date = start_date,
+                    display_format='DD/MMM/YY',
+                    max_date_allowed=calendar.end_date,
+                    #month_format='Do/MMM/YY',
                     id = "birthdate_input",
                     style={"display":"inline"}
                 )
@@ -48,10 +49,10 @@ birthdate_picker = html.Div(
 
 top_bar = html.Div(
         [
-            html.H1("100 year calendar",style={"display":"inline"}),
+            html.H1("100 year calendar",style={"display":"inline","margin":"5px","padding":"5px"}),
             birthdate_picker
         ],
-        style= {"position" : "relative"},
+        style= {"position" : "relative", "height" : "5%"},
         className = "bg-secondary"
     )
 
@@ -77,4 +78,4 @@ def update_bar_chart(start_date):
     return fig
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server()
