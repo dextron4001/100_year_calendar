@@ -18,6 +18,13 @@ html:
 	#cp _static/async-table* 127.0.0.1:8050/_dash-component-suites/dash_table/
 	#ps | grep python | awk '{print $$1}' | xargs kill -9
 
+submodules:
+	git submodule init
+	git submodule update
+
+clean:
+	rm -rf 127.0.0.1:8050/
+
 gh-pages:
 	cd 127.0.0.1:8050 && touch .nojekyll && git init && git add * && git add .nojekyll && git commit -m "update" && git remote add origin https://github.com/dextron4001/100_year_calendar.git && git push -f origin masin
 
