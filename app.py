@@ -25,6 +25,7 @@ calendar = Weekly_calendar(start_date)
 fig = draw_graph(calendar.calendar,start_date)
 
 app = Dash(external_stylesheets=[dbc.themes.DARKLY,dbc_css])
+server = app.server
 
 birthdate_picker = html.Div(
             [
