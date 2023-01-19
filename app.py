@@ -12,7 +12,7 @@ calendar = Weekly_calendar(start_date)
 fig = draw_graph(calendar.calendar,start_date)
 
 app = Dash(external_stylesheets=[dbc.themes.SKETCHY,dbc_css])
-#server = app.server
+server = app.server
 
 app.layout = html.Div(
     [
