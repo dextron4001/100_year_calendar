@@ -36,11 +36,12 @@ class Weekly_calendar:
         df['year_real'] = df.apply(lambda x: x['week']/52 ,axis=1)
         df['week_no'] = df.apply(lambda x: math.floor(x['week'] - x['year_no']*52) ,axis=1)
         df2 = df.groupby(['year_no', 'week_no']).agg(week_start=('date', np.min),week_end=('date', np.max),year_real=('year_real',np.max)).reset_index()
-        df2['status'] = df2.apply(lambda x: get_status(x,self.current_date),axis=1)
+        df2['status'] = df2.apply(lambda x: get_status(x,self.current_date,self.life_expectancy),axis=1)
         return df2
 
-    def __init__(self,start_date) -> None:
+    def __init__(self,start_date,life_expectancy=100) -> None:
         self.start_date = start_date
+        self.life_expectancy = life_expectancy
         self.current_date = dt.date.today()
         self.end_date = self.get_end_date()
         self.calendar = self.define_calendar()
@@ -50,7 +51,7 @@ def draw_graph(df,start_date):
         x = df['week_no'],
         y = df['year_no'],
         color = df["status"],
-        color_discrete_map={"past": 'red',"future":"white","current":"green"},
+        color_discrete_map={"past": 'red',"future":"white","current":"green","dead":"black"},
         height = 850,
         template = "sketchy",
         labels=dict(week_no="Week", year_no="Year", status="Status"),
@@ -63,7 +64,3 @@ def draw_graph(df,start_date):
     )
     fig.update_traces(marker_size=7,marker_line=dict(width=0.5,color="DarkSlateGrey"),selector=dict(mode='markers'))
     return fig
-
-C = Weekly_calendar(dt.date(1990,2,19))
-
-print(C.__dict__)

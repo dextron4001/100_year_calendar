@@ -1,5 +1,6 @@
 from lib.functions import Weekly_calendar, draw_graph
-from dash import Dash, html, dcc, Output, Input
+from dash import Dash, html, dcc, Output, Input , State
+import pandas as pd
 
 import datetime as dt
 
@@ -10,6 +11,10 @@ start_date = dt.date(1990,1,1)
 
 calendar = Weekly_calendar(start_date)
 fig = draw_graph(calendar.calendar,start_date)
+
+life_expectancy_data = pd.read_csv('data/life-expectancy-at-birth-total-years.csv')
+print(life_expectancy_data.columns)
+life_expectancy_options = life_expectancy_data['Entity'].unique().tolist()
 
 app = Dash(external_stylesheets=[dbc.themes.SKETCHY,dbc_css])
 server = app.server
@@ -24,7 +29,7 @@ app.layout = html.Div(
             [
                 html.Div(
                     "Birthdate",
-                    style={"display":"inline", "margin-right" : "10px", "font-size": "19px","font-family": "var(--bs-body-font-family)"}
+                    style={"display":"inline", "margin-right" : "10px", "padding-top": "10px","font-size": "19px","font-family": "var(--bs-body-font-family)"}
                 ),
                 dcc.DatePickerSingle(
                     date = start_date,
@@ -34,6 +39,11 @@ app.layout = html.Div(
                     id = "birthdate_input",
                     style={"display":"inline"}
                 ),
+                html.Div(
+                    "Location",
+                    style={"display":"inline", "margin-right" : "10px", "padding-top": "10px", "font-size": "19px","font-family": "var(--bs-body-font-family)"}
+                ),
+                dcc.Dropdown(life_expectancy_options, id="location-dropdown"),
                 html.Div("Add link to poster",style={"float":"bottom"})
             ],
             style={
@@ -50,11 +60,20 @@ app.layout = html.Div(
 
 @app.callback(
     Output("graph", "figure"), 
-    Input("birthdate_input", "date")
+    Input("birthdate_input", "date"),
+    Input("location-dropdown","value")
 )
-def update_bar_chart(start_date):
+def update_bar_chart(start_date,location):
+    life_expectancy = 100
     start_date = dt.datetime.strptime(start_date, '%Y-%m-%d').date()
-    calendar = Weekly_calendar(start_date)
+    year = start_date.year
+    if location != None:
+        filtered_data = life_expectancy_data[life_expectancy_data['Entity']==location]
+        filtered_data = filtered_data.iloc[(filtered_data['Year']-year).abs().argsort()[:1]]
+        life_expectancy = filtered_data['Life expectancy at birth, total (years)'].iloc[0]
+        print(life_expectancy)
+
+    calendar = Weekly_calendar(start_date,life_expectancy)
     fig = draw_graph(calendar.calendar,start_date)
     return fig
 
