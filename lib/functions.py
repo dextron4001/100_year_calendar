@@ -43,7 +43,7 @@ def draw_graph(df,start_date):
         y = df['year_no'],
         color = df["status"],
         color_discrete_map={"True": 'red' },
-        height = "100%",
+        height = 850,
         template = 'plotly_dark',
         labels=dict(week_no="Week", year_no="Year", status="Status"),
         color_discrete_sequence=['black','red','yellow']#,
