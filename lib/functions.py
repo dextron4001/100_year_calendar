@@ -3,6 +3,9 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import math
+from dash_bootstrap_templates import load_figure_template
+
+load_figure_template("sketchy")
 
 def get_status(row,current_date):
     e_date = row['week_end']
@@ -44,7 +47,7 @@ def draw_graph(df,start_date):
         color = df["status"],
         color_discrete_map={"True": 'red' },
         height = 850,
-        template = 'plotly_dark',
+        template = "sketchy",
         labels=dict(week_no="Week", year_no="Year", status="Status"),
         color_discrete_sequence=['black','red','yellow']#,
         #title = f"{start_date}"

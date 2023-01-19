@@ -1,0 +1,55 @@
+.app-grid {
+    display: grid; 
+ 
+    grid-template-rows: 5% 93% 2%;
+    grid-template-columns: 10% 10% 70% 10%;
+    
+    gap: 0px;
+    height: 100vh;
+    
+ }
+   
+ #logo {
+ 
+    grid-row-start: 1;
+    grid-column-start: 1;
+ 
+    grid-row-end: 2;
+    grid-column-end: 3;
+    
+ }
+ #content {
+ 
+    grid-row-start: 2;
+    grid-column-start: 1;
+ 
+    grid-row-end: 3;
+    grid-column-end: 4;
+    
+ }
+ #footer {
+ 
+    grid-row-start: 3;
+    grid-column-start: 1;
+ 
+    grid-row-end: 4;
+    grid-column-end: 5;
+    
+ }
+ #header {
+ 
+    grid-row-start: 1;
+    grid-column-start: 3;
+ 
+    grid-row-end: 2;
+    grid-column-end: 5;
+    
+ }
+ #side {
+ 
+    grid-row-start: 2;
+    grid-column-start: 4;
+ 
+    grid-row-end: 3;
+    grid-column-end: 5;
+ }
