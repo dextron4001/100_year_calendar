@@ -1,7 +1,7 @@
 .app-grid {
     display: grid; 
  
-    grid-template-rows: 5% 93% 2%;
+    grid-template-rows: 5% 90% 5%;
     grid-template-columns: 10% 10% 70% 10%;
     
     gap: 0px;

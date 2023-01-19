@@ -33,7 +33,8 @@ app.layout = html.Div(
                     #month_format='Do/MMM/YY',
                     id = "birthdate_input",
                     style={"display":"inline"}
-                )
+                ),
+                html.Div("Add link to poster",style={"float":"bottom"})
             ],
             style={
                 "float":"right",
@@ -42,7 +43,7 @@ app.layout = html.Div(
             )
             ,id="side"
         ),
-        html.Div(html.P("Copyright Dexter Robinson 2022",style={"float":"right"}),id="footer")
+        html.Div(html.P("Copyright Dexter Robinson 2023 ",style={"float":"right","margin":"2px"}),id="footer")
     ],
     className="app-grid"
 )

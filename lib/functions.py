@@ -7,14 +7,18 @@ from dash_bootstrap_templates import load_figure_template
 
 load_figure_template("sketchy")
 
-def get_status(row,current_date):
+def get_status(row,current_date,life_expectancy=100):
     e_date = row['week_end']
     s_date = row['week_start']
+    year_real = row['year_real']
     status = "future"
     if s_date <= current_date:
         status = "current"
     if e_date < current_date:
         status = "past"
+    if year_real > life_expectancy:
+        status = "dead"
+    
     return status
 
 class Weekly_calendar:
@@ -29,8 +33,9 @@ class Weekly_calendar:
         df['start_date'] = pd.to_datetime(self.start_date)
         df['week'] = df.apply(lambda x: math.floor((x['date']-x['start_date']).days/7.02403846154) ,axis=1)
         df['year_no'] = df.apply(lambda x: math.floor(x['week']/52) ,axis=1)
+        df['year_real'] = df.apply(lambda x: x['week']/52 ,axis=1)
         df['week_no'] = df.apply(lambda x: math.floor(x['week'] - x['year_no']*52) ,axis=1)
-        df2 = df.groupby(['year_no', 'week_no']).agg(week_start=('date', np.min),week_end=('date', np.max)).reset_index()
+        df2 = df.groupby(['year_no', 'week_no']).agg(week_start=('date', np.min),week_end=('date', np.max),year_real=('year_real',np.max)).reset_index()
         df2['status'] = df2.apply(lambda x: get_status(x,self.current_date),axis=1)
         return df2
 
@@ -45,18 +50,18 @@ def draw_graph(df,start_date):
         x = df['week_no'],
         y = df['year_no'],
         color = df["status"],
-        color_discrete_map={"True": 'red' },
+        color_discrete_map={"past": 'red',"future":"white","current":"green"},
         height = 850,
         template = "sketchy",
         labels=dict(week_no="Week", year_no="Year", status="Status"),
-        color_discrete_sequence=['black','red','yellow']#,
+        #discrete_sequence=['black','red','yellow']#,
         #title = f"{start_date}"
         )
     fig.update_layout( 
         xaxis = dict(tickmode = 'linear', tick0 = 0, dtick = 1 , range = [-0.5,51.5]),
         yaxis = dict(tickmode = 'linear', tick0 = 0, dtick = 5 , range = [-0.5,100.5])
     )
-    fig.update_traces(marker_size=7,marker_line=dict(width=1),selector=dict(mode='markers'))
+    fig.update_traces(marker_size=7,marker_line=dict(width=0.5,color="DarkSlateGrey"),selector=dict(mode='markers'))
     return fig
 
 C = Weekly_calendar(dt.date(1990,2,19))
